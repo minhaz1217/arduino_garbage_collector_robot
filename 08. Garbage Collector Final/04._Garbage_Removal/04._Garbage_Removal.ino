@@ -141,7 +141,7 @@ int readSonar(){
 }
 
 void removeGarbage(){
-  Serial.println("Removing Garbage");
+  //Serial.println("Removing Garbage");
   int mydel = 600;
   servo.write(0);
   delay(mydel);
@@ -150,44 +150,48 @@ void removeGarbage(){
   servo.write(0);
   delay(10);
 }
+
+
 void loop() {
-  if(FOLLOW_LINE == 1){
     int dist = readSonar();
-    Serial.println(dist);
+    // Serial.println(dist);
     if(dist <= 8){
       FOLLOW_LINE = 0;
       removeGarbage();
       delay(2000);
+      //FOLLOW_LINE = 1;
+    }else{
       FOLLOW_LINE = 1;
     }
-  }
-  data[0] =analogRead(A0);
-  analogWrite(ENA, data[0]);
-  analogWrite(ENB, data[0]); 
-  data[1] =analogRead(A1); 
-  data[2] =analogRead(A2); 
-  data[3] =analogRead(A3); 
-  data[4] =analogRead(A4); 
-  delay(10);
-  sprintf (bfr, "Output %d: %d %d %d %d %d",counter, data[0], data[1], data[2], data[3], data[4]);
-  Serial.println (bfr);
-  if(data[3] > TH || data[2] > TH){
-    goFront();
-    digitalWrite(13, LOW);
-    Serial.println ("FRONT");
-  }else if(data[4] > TH){
-    goLeft();
-    digitalWrite(13, LOW);
-    
-    Serial.println ("Left");
-  }else if(data[1] > TH){
-    goRight();
-    digitalWrite(13, LOW);
-    Serial.println ("Right");
-  }else{
-    goBack();
-    digitalWrite(13, HIGH);
-    Serial.println ("STOP");
+  if(FOLLOW_LINE == 1){
+    data[0] =analogRead(A0);
+    analogWrite(ENA, data[0]);
+    analogWrite(ENB, data[0]); 
+    data[1] =analogRead(A1); 
+    data[2] =analogRead(A2); 
+    data[3] =analogRead(A3); 
+    data[4] =analogRead(A4); 
+    delay(10);
+    sprintf (bfr, "Output %d: %d %d %d %d %d",counter, data[0], data[1], data[2], data[3], data[4]);
+    Serial.println (bfr);
+    if(data[3] > TH || data[2] > TH){
+      goFront();
+      digitalWrite(13, LOW);
+      Serial.println ("FRONT");
+    }else if(data[4] > TH){
+      goLeft();
+      digitalWrite(13, LOW);
+      
+      Serial.println ("Left");
+    }else if(data[1] > TH){
+      goRight();
+      digitalWrite(13, LOW);
+      Serial.println ("Right");
+    }else{
+      goBack();
+      digitalWrite(13, HIGH);
+      Serial.println ("STOP");
+    }
   }
   delay(50);
 }
